@@ -32,3 +32,15 @@ _As a student, I want to create main tasks (like “Graduate”) with subtasks (
 - **[GitHub Project Board](https://github.com/unitasker/projects)** - Task tracking and sprint planning.
 
 ## Repo Structure
+/ ├── frontend/
+├── backend/
+├── docs/
+├── team.md
+├── system-design.md
+└── ci-cd-guide.md
+├── .github/
+└── workflows/
+└── ci.yml
+├── README.md
+├── api/
+└── openapi.yaml
