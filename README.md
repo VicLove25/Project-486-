@@ -144,14 +144,25 @@ Maintain the **Wiki** for:
 
 ## 🎯 MILESTONES & SPRINTS
 
-| Sprint | Focus | Deadline |
-|--------|--------|-----------|
-| Sprint 1 | Task UI and subtasks | Sept 15 |
-| Sprint 2 | Backend + Database | Oct 1 |
-| Sprint 3 | Auth + User Profiles | Oct 15 |
-| Sprint 4 | Polish + Docs + Demo | Oct 30 |
+### 🗓️ UniTasker Project Timeline (October–November 2025)
 
-**MVP Deadline:** 🏁 **Nov 1**
+| Week | Dates | Focus | Deliverables / Milestones |
+|------|--------|--------|----------------------------|
+| **Week 1** | Oct 20 – Oct 26 | **Setup & Planning** | ✅ Create GitHub repo and folders (`frontend/`, `backend/`, `docs/`) <br> ✅ Write `README.md` and `team.md` <br> ✅ Define user stories and acceptance criteria <br> ✅ Assign roles & setup GitHub Project Board |
+| **Week 2** | Oct 27 – Nov 2 | **Frontend Prototype** | 🎨 Build UI mockups/wireframes <br> 🧱 Create basic HTML/CSS/JS structure (Bootstrap layout, nav bar) <br> 🧩 Add task/subtask input and list display <br> 🧠 Document progress in `/docs/system-design.md` |
+| **Week 3** | Nov 3 – Nov 9 | **Backend & Data Storage** | ⚙️ Initialize Node.js + Express backend <br> 💾 Set up MongoDB connection or localStorage fallback <br> 🔌 Implement basic API routes (`GET`, `POST`, `DELETE`) <br> 🧱 Test with Postman or frontend fetch calls |
+| **Week 4** | Nov 10 – Nov 16 | **Integration & Authentication** | 🔐 Add user authentication (JWT or session-based) <br> 🔄 Connect frontend to backend (task persistence) <br> 🧩 Test full CRUD flow from UI <br> 🪶 Update `/docs/ci-cd-guide.md` |
+| **Week 5** | Nov 17 – Nov 25 | **Testing, Polish & Documentation** | 🧪 Finalize responsive design <br> 🪲 Fix bugs from testing <br> 📚 Complete documentation (`README`, Wiki, System Design) <br> 🎥 Prepare short demo or presentation video <br> 🚀 Optional: deploy staging site (Render/Netlify) |
+
+---
+
+### 🏁 End-of-November Goal (Nov 25)
+✅ Fully functional **MVP (Minimum Viable Product)**:
+- Users can create and delete tasks/subtasks  
+- Tasks persist between sessions  
+- UI works on desktop and mobile  
+- Basic backend API running and tested  
+- README, team.md, and system design docs complete  
 
 ---
 
