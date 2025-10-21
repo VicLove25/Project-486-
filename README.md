@@ -29,7 +29,7 @@ _As a student, I want to create main tasks (like “Graduate”) with subtasks (
 - **[Deployed Frontend URL](#)** - Coming Soon.
 - **[Deployed API URL](#)** - Coming Soon.
 - **[Wiki Home](https://github.com/VicLove25/UniTasker/wiki)** - Team notes and documentation.
-- **[GitHub Project Board](https://github.com/unitasker/projects)** - Task tracking and sprint planning.
+- **[GitHub Project Board](https://github.com/users/VicLove25/projects/1)** - Task tracking and sprint planning.
 
 ## Repo Structure
 / ├── frontend/
