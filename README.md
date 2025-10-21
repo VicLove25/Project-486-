@@ -28,7 +28,7 @@ _As a student, I want to create main tasks (like “Graduate”) with subtasks (
 - **[OpenAPI YAML](./api/openapi.yaml)** - API specification.
 - **[Deployed Frontend URL](#)** - Coming Soon.
 - **[Deployed API URL](#)** - Coming Soon.
-- **[Wiki Home]([./docs/wiki-home.md](https://github.com/VicLove25/UniTasker/wiki))** - Team notes and documentation.
+- **[Wiki Home](https://github.com/VicLove25/UniTasker/wiki)** - Team notes and documentation.
 - **[GitHub Project Board](https://github.com/unitasker/projects)** - Task tracking and sprint planning.
 
 ## Repo Structure
