@@ -66,7 +66,7 @@
 ---
 
 ## 🧱 REPO STRUCTURE
----
+
 /
 ├── frontend/
 ├── backend/
@@ -80,7 +80,7 @@
 ├── README.md
 ├── api/
 │ └── openapi.yaml
----
+
 ---
 
 
