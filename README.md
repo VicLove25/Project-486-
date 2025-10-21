@@ -19,8 +19,6 @@
 |------|------|--------|---------------|------|------------------|--------------|
 | **Spencer Blake** | Product Manager / Backend Dev | Information Technology | Cybersecurity & Software Development | Bridges technology and people through thoughtful design and security awareness. | Type 5 / ISTJ | Strong in planning and follow-through; occasionally overanalyzes details before acting. |
 
-🔗 [Free Enneagram Test](https://www.truity.com/test/enneagram-personality-test)  
-🔗 [Enneagram Institute](https://www.enneagraminstitute.com/)
 
 ---
 
@@ -84,3 +82,98 @@
 │ └── openapi.yaml
 
 ---
+
+
+## 📚 DOCUMENTATION
+
+Use `/docs/` for:
+- System design documentation  
+- Developer guides  
+- CI/CD instructions  
+- Accessibility and security policies  
+
+Maintain the **Wiki** for:
+- Team bios  
+- Meeting notes  
+- Retrospectives  
+
+---
+
+## 🧠 DEV TEAM PROCESS
+
+### **Workflow**
+- Daily standups (video or chat)
+- All tasks managed as GitHub issues with labels (`dev`, `meeting`, `epic`)
+- Flow:
+- Issue --> Branch --> PR --> Code Review --> Dev Branch --> Main Branch (Production)
+
+### **GitHub Settings**
+- Protect main branch (no direct pushes)  
+- Require code reviews before merging  
+- Use `dev` branch for integration and staging deploys  
+
+### **Meetings**
+- Document meetings as GitHub issues with summaries  
+- Use Slack/Discord for communication  
+
+---
+
+## 🧪 TESTING & DEPLOYMENT
+
+| Environment | Branch | Deployment | Notes |
+|--------------|---------|-------------|-------|
+| **Staging** | `dev` | Render | Auto-deploy for testing |
+| **Production** | `main` | Google Cloud | Auto-deploy to live site |
+
+**Pull Requests must include:**
+- Linked issue  
+- Screenshots/videos for UI changes  
+- Evidence of test success  
+
+---
+
+## 📦 PRODUCT FEATURES
+
+| Feature | Status | Screenshot Example | Related Issue |
+|----------|--------|--------------------|----------------|
+| Create/Delete Tasks | ✅ Done | — | #4 |
+| Add/Delete Subtasks | ✅ Done | — | #6 |
+| Responsive Design | 🚧 In Development | — | #9 |
+
+---
+
+## 🎯 MILESTONES & SPRINTS
+
+| Sprint | Focus | Deadline |
+|--------|--------|-----------|
+| Sprint 1 | Task UI and subtasks | Sept 15 |
+| Sprint 2 | Backend + Database | Oct 1 |
+| Sprint 3 | Auth + User Profiles | Oct 15 |
+| Sprint 4 | Polish + Docs + Demo | Oct 30 |
+
+**MVP Deadline:** 🏁 **Nov 1**
+
+---
+
+## 🛡️ SECURITY, ETHICS & PRIVACY
+
+| Aspect | Policy Highlights |
+|--------|--------------------|
+| **Authentication** | JWT tokens with refresh and expiry |
+| **Personal Data** | Minimal PII, encryption at rest and in transit |
+| **Backups** | Weekly encrypted backups |
+| **Threats** | Protect against leaks, hijacks, spam |
+| **Accessibility** | Screen reader support, focus states, high contrast |
+| **Ethics** | Transparency, user control, consent for data use |
+
+---
+
+## 📊 SYSTEM DESIGN OVERVIEW
+
+```mermaid
+graph TD
+  WebClient --> API
+  API --> MongoDB
+  API --> 3rdPartyServices
+
+
