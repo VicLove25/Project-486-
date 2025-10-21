@@ -18,7 +18,7 @@
 | Name | Role | Major | Career Focus | Bio | Enneagram / MBTI | Team Insight |
 |------|------|--------|---------------|------|------------------|--------------|
 | **Spencer Blake** | Product Manager / Backend Dev | Information Technology | Cybersecurity & Software Development | Bridges technology and people through thoughtful design and security awareness. | Type 5 / ISTJ | Strong in planning and follow-through; occasionally overanalyzes details before acting. |
-
+| **Victor Love** | Developer | CIS (Cyber Security Minor) | Cyber Security Analyst / IT Consultant | Focused on applying information systems knowledge to solve complex security challenges. | Enneagram Type: 3w4 | Good communicator and resilient worker. |
 
 ---
 
