@@ -69,4 +69,18 @@
 
 ## 🧱 REPO STRUCTURE
 
+/
+├── frontend/
+├── backend/
+├── docs/
+│ ├── team.md
+│ ├── system-design.md
+│ └── ci-cd-guide.md
+├── .github/
+│ └── workflows/
+│ └── ci.yml
+├── README.md
+├── api/
+│ └── openapi.yaml
 
+---
