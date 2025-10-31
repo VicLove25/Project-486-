@@ -1,3 +1,4 @@
+// app.mjs
 document.addEventListener('DOMContentLoaded', () => {
     const authSection = document.getElementById('auth-section');
     const usernameInput = document.getElementById('username');
@@ -6,30 +7,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerBtn = document.getElementById('register-btn');
 
     const taskSection = document.getElementById('task-section');
-    const taskForm = document.getElementById('new-task-form');
-    const taskInput = document.getElementById('task-input');
     const taskList = document.getElementById('task-list');
     const logoutBtn = document.getElementById('logout-btn');
-    const userInfo = document.getElementById('user-info');
+    const totalTasksEl = document.getElementById('total-tasks');
+    const completedTasksEl = document.getElementById('completed-tasks');
+    const pendingTasksEl = document.getElementById('pending-tasks');
+    const upcomingListEl = document.getElementById('upcoming-list');
 
     const errorMessage = document.getElementById('error-message');
 
     function showError(message) {
         errorMessage.textContent = message;
         errorMessage.style.display = 'block';
-        setTimeout(() => {
-            errorMessage.style.display = 'none';
-        }, 4000);
+        setTimeout(() => { errorMessage.style.display = 'none'; }, 4000);
     }
-    
+
     function getAuthHeaders() {
         const token = localStorage.getItem('token');
         if (!token) return null;
-        
-        return {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        };
+        return { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
     }
 
     async function fetchTasks() {
@@ -38,140 +34,130 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch('/api/tasks', { headers });
-
             if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
-                   logout();
-                }
+                if (response.status === 401 || response.status === 403) logout();
                 throw new Error('Could not fetch tasks.');
             }
 
             const tasks = await response.json();
             renderTasks(tasks);
+            updateDashboard(tasks);
         } catch (error) {
             showError(error.message);
         }
     }
 
-    taskForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const description = taskInput.value.trim();
-        if (!description) return;
-
-        const headers = getAuthHeaders();
-
-        try {
-            const response = await fetch('/api/tasks', {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({ description })
-            });
-
-            if (!response.ok) throw new Error('Failed to add task.');
-            
-            taskInput.value = '';
-            fetchTasks();
-        } catch (error) {
-            showError(error.message);
-        }
-    });
-
-    taskList.addEventListener('click', async (e) => {
-        const headers = getAuthHeaders();
-        const target = e.target;
-        const li = target.closest('li');
-        if (!li) return;
-
-        const id = li.dataset.id;
-
-        if (target.classList.contains('delete-btn')) {
-            try {
-                const response = await fetch(`/api/tasks/${id}`, {
-                    method: 'DELETE',
-                    headers: headers
-                });
-                if (!response.ok) throw new Error('Failed to delete task.');
-                fetchTasks();
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-
-        if (target.classList.contains('toggle-btn')) {
-            const isCompleted = !li.querySelector('span').classList.contains('completed');
-            try {
-                const response = await fetch(`/api/tasks/${id}`, {
-                    method: 'PUT',
-                    headers: headers,
-                    body: JSON.stringify({ isCompleted })
-                });
-                if (!response.ok) throw new Error('Failed to update task.');
-                fetchTasks();
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-    });
-
     function renderTasks(tasks) {
         taskList.innerHTML = '';
-        if (tasks.length === 0) {
-            taskList.innerHTML = '<li class="list-group-item text-muted">No tasks yet. Add one above!</li>';
+        upcomingListEl.innerHTML = '';
+        if (!tasks.length) {
+            taskList.innerHTML = '<li class="list-group-item text-muted">No tasks yet.</li>';
+            upcomingListEl.innerHTML = '<li class="text-muted">No upcoming tasks</li>';
             return;
         }
+
+        // Sort tasks by due date ascending
+        tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
         tasks.forEach(task => {
             const li = document.createElement('li');
             li.className = 'list-group-item d-flex justify-content-between align-items-center';
             li.dataset.id = task._id;
             li.innerHTML = `
-                <span class="${task.isCompleted ? 'completed' : ''}">${task.description}</span>
+                <span class="${task.isCompleted ? 'completed' : ''}">${task.description} - Due: ${task.dueDate || 'No Date'}</span>
                 <div>
                     <button class="btn btn-sm btn-outline-success toggle-btn">${task.isCompleted ? 'Undo' : 'Complete'}</button>
                     <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
                 </div>
             `;
             taskList.appendChild(li);
+
+            if (!task.isCompleted) {
+                const upLi = document.createElement('li');
+                upLi.textContent = `${task.description} - Due: ${task.dueDate || 'No Date'}`;
+                upcomingListEl.appendChild(upLi);
+            }
         });
+
+        if (upcomingListEl.innerHTML === '') {
+            upcomingListEl.innerHTML = '<li class="text-muted">No upcoming tasks</li>';
+        }
     }
 
-    registerBtn.addEventListener('click', async () => {
-        const username = usernameInput.value;
-        const password = passwordInput.value;
+    function updateDashboard(tasks) {
+        const total = tasks.length;
+        const completed = tasks.filter(t => t.isCompleted).length;
+        const pending = total - completed;
 
-        try {
-            const response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error);
-            alert('Registration successful! Please log in.');
-        } catch (error) {
-            showError(error.message);
+        totalTasksEl.textContent = total;
+        completedTasksEl.textContent = completed;
+        pendingTasksEl.textContent = pending;
+    }
+
+    taskList.addEventListener('click', async (e) => {
+        const target = e.target;
+        const li = target.closest('li');
+        if (!li) return;
+        const id = li.dataset.id;
+        const headers = getAuthHeaders();
+
+        if (target.classList.contains('delete-btn')) {
+            try {
+                const res = await fetch(`/api/tasks/${id}`, { method: 'DELETE', headers });
+                if (!res.ok) throw new Error('Failed to delete task.');
+                fetchTasks();
+            } catch (err) { showError(err.message); }
+        }
+
+        if (target.classList.contains('toggle-btn')) {
+            const isCompleted = !li.querySelector('span').classList.contains('completed');
+            try {
+                const res = await fetch(`/api/tasks/${id}`, {
+                    method: 'PUT',
+                    headers,
+                    body: JSON.stringify({ isCompleted })
+                });
+                if (!res.ok) throw new Error('Failed to update task.');
+                fetchTasks();
+            } catch (err) { showError(err.message); }
         }
     });
 
-    loginBtn.addEventListener('click', async () => {
-        const username = usernameInput.value;
-        const password = passwordInput.value;
+    registerBtn.addEventListener('click', async () => {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        if (!username || !password) return showError('Username and password required.');
+
         try {
-            const response = await fetch('/api/auth/login', {
+            const res = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error);
-            
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Registration failed.');
+            alert('Registration successful! Please log in.');
+        } catch (err) { showError(err.message); }
+    });
+
+    loginBtn.addEventListener('click', async () => {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        if (!username || !password) return showError('Username and password required.');
+
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Login failed.');
+
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', data.user.username);
-            
             updateUIForAuthState();
-        } catch (error) {
-            showError(error.message);
-        }
+        } catch (err) { showError(err.message); }
     });
 
     function logout() {
@@ -186,15 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (token) {
             authSection.style.display = 'none';
             taskSection.style.display = 'block';
-            userInfo.textContent = `Logged in as: ${localStorage.getItem('username')}`;
             fetchTasks();
         } else {
             authSection.style.display = 'block';
             taskSection.style.display = 'none';
             taskList.innerHTML = '';
+            upcomingListEl.innerHTML = '<li class="text-muted">No upcoming tasks</li>';
         }
     }
 
-    // Initial check when the page loads
     updateUIForAuthState();
 });

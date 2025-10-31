@@ -1,4 +1,143 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9f9;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: linear-gradient(135deg, #3c6e47, #7da57d);
+    color: #fff;
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .dashboard-card i {
+        opacity: 0.8;
+    }
+
+    .dashboard-card h6 {
+        color: #f9f9f9;
+        font-weight: 600;
+    }
+
+    .dashboard-card p {
+        color: #f2f2f2;
+        font-weight: bold;
+    }
+
+/* Upcoming Deadlines Card */
+.upcoming-card {
+    background-color: #e9f1ea;
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .upcoming-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .upcoming-card h6 {
+        color: #2e5335;
+        font-weight: 600;
+    }
+
+#upcoming-list li {
+    color: #3a5a3a;
+    font-weight: 500;
+    padding: 5px 0;
+    transition: background-color 0.2s;
+}
+
+    #upcoming-list li:hover {
+        background-color: rgba(124, 165, 125, 0.15);
+        border-radius: 8px;
+    }
+
+/* Task List */
+#task-list li {
+    border-radius: 12px;
+    margin-bottom: 10px;
+    padding: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    #task-list li:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    #task-list li span {
+        color: #333;
+    }
+
 .completed {
     text-decoration: line-through;
-    color: #6c757d;
+    color: #9da79d;
+}
+
+/* Buttons */
+.add-task-btn {
+    background-color: #3c6e47;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: all 0.2s;
+}
+
+    .add-task-btn:hover {
+        background-color: #2e5335;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+.btn-outline-success {
+    color: #3c6e47;
+    border-color: #3c6e47;
+    transition: all 0.2s;
+}
+
+    .btn-outline-success:hover {
+        background-color: #3c6e47;
+        color: #fff;
+    }
+
+.btn-outline-danger {
+    color: #a94442;
+    border-color: #a94442;
+    transition: all 0.2s;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #a94442;
+        color: #fff;
+    }
+
+/* Form Inputs */
+form input, form select {
+    border-radius: 10px;
+    border: 1px solid #c1c1c1;
+    padding: 8px;
+}
+
+    form input:focus, form select:focus {
+        border-color: #3c6e47;
+        box-shadow: 0 0 6px rgba(60, 110, 71, 0.3);
+        outline: none;
+    }
+
+/* Error message */
+#error-message {
+    font-weight: 500;
 }
