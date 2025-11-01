@@ -8,7 +8,19 @@
     <link rel="stylesheet" href="styles/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="bg-light has-sidebar">
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="#"><i class="fas fa-home me-2"></i> <span>Dashboard</span></a>
+        <a href="taskpage.html"><i class="fas fa-plus me-2"></i> <span>Add Task</span></a>
+        <a href="#"><i class="fas fa-list me-2"></i> <span>All Tasks</span></a>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="toggle-btn" class="toggle-btn">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <div class="container mt-5">
 
@@ -92,5 +104,14 @@
     </div>
 
     <script src="js/app.js"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggle-btn');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            document.body.classList.toggle('sidebar-collapsed');
+        });
+    </script>
 </body>
 </html>
