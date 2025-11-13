@@ -1,26 +1,27 @@
 // authController.js
-import bcrypt from 'bcrypt';
-import User from './User.js';
-import { connectDB, getDB } from './db.js';
+import bcrypt from 'bcryptjs';
+import User from '../model/User.js';
+import { connectDB, getDB } from '../db.js';
 
 const SALT_ROUNDS = 10;
 
-export async function accRegister(uName, secret, fName, lName) {
+export async function accRegister(uName, secret) {
     try {
-        const db = await connectDB();
-        const collection = db.collection("Users");
 
         // Check if username exists
-        const existingUser = await collection.findOne({ Username: uName });
+        const existingUser = await User.findByUsername(uName);
+
         if (existingUser) {
-            console.error("Account with that username already exists");
+            console.log("Account with that username already exists");
             return null;
+        } else {
+            console.log("Username is available");
         }
 
         // Hash the password before saving
         const hashedPassword = await bcrypt.hash(secret, SALT_ROUNDS);
 
-        const newUser = new User(uName, hashedPassword, fName, lName);
+        const newUser = new User(uName, hashedPassword, "", "", []);
         await newUser.save(); // Save the new user to the database
 
         console.log(`Successfully created user profile for ${uName}!`);
@@ -28,25 +29,24 @@ export async function accRegister(uName, secret, fName, lName) {
 
     } catch (error) {
         console.error("Error registering user:", error);
+        return null;
     }
 }
 
-export async function authLogin(userName, secret) {
+export async function authLogin(uName, secret) {
     try {
-        const db = await connectDB();
-        const collection = db.collection("Users");
 
         // Find the user by username
-        const user = await collection.findOne({ Username: userName });
+        const user = await User.findByUsername(uName);
         if (!user) {
-            console.error("Invalid username or password");
+            console.log("Invalid Username");
             return null;
         }
 
         // Compare hashed password
         const isValid = await bcrypt.compare(secret, user.Password);
         if (!isValid) {
-            console.error("Invalid username or password");
+            console.log("Invalid password");
             return null;
         }
 

@@ -1,15 +1,18 @@
-import { getDB } from "../db.js";
+import { getDB, connectDB } from "../db.js";
 import { ObjectId } from "mongodb";
 
 export default class User {
-    constructor(username, password, taskLists = []) {
+    constructor(username, password, fName, lName, taskLists = []) {
         this.Username = username;
         this.Password = password;
+        this.First = fName;
+        this.Last = lName;
         this.TaskLists = taskLists;
     }
 
     static get collection() {
-        return getDB().collection("Users");
+        const db = getDB();
+        return db.collection("Users");
     }
 
     async save() {

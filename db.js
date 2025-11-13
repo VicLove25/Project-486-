@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
 const uri = process.env.MONGO_URI;
 if (!uri) {
@@ -22,7 +21,7 @@ export async function connectDB() {
     if (!db) {
         await client.connect();
         console.log("Connected to MongoDB Atlas!");
-        db = client.db("Unitask");
+        db = client.db("UniTask");
     }
     return db;
 }

@@ -1,10 +1,13 @@
-import 'dotenv/config'
-import express from 'express'
+import 'dotenv/config';
+import express from 'express';
+import jwt from 'jsonwebtoken';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { connectDB, getDB, closeDB } from './db.js';
+import { accRegister, authLogin } from './controllers/AuthController.js';
 import Task from './model/Task.js';
 import User from './model/User.js';
+import bcrypt from 'bcryptjs';
 
 const app = express()
 const PORT = process.env.PORT || 3000;
@@ -53,31 +56,24 @@ app.post('/api/auth/register', async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        // Simple validation
+        // Basic validation
         if (!username || !password || password.length < 6) {
             return res.status(400).json({ error: 'Username and a password of at least 6 characters are required' });
         }
 
-        // Check if user already exists
-        const existingUser = await User.findByUsername(username);
-        if (existingUser) {
-            return res.status(400).json({ error: 'Username already exists' });
+        // Call the authController function
+        const newUser = await accRegister(username, password);
+
+        if (!newUser) {
+            return res.status(400).json({ error: 'Registration failed. Username may already exist.' });
         }
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create new user instance and save
-        const newUser = new User(username, hashedPassword);
-        await newUser.save();
-
         res.status(201).json({ message: 'User registered successfully', userId: newUser._id });
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to register user' });
     }
 });
-
 
 // Login user
 app.post('/api/auth/login', async (req, res) => {
@@ -88,22 +84,26 @@ app.post('/api/auth/login', async (req, res) => {
             return res.status(400).json({ error: 'Username and password are required' });
         }
 
-        // Use the model to find the user
-        const user = await User.findByUsername(username);
-        if (!user) return res.status(400).json({ error: 'Invalid username or password' });
+        // Use authController function
+        const user = await authLogin(username, password);
 
-        // Verify password
-        const isValidPassword = await bcrypt.compare(password, user.Password);
-        if (!isValidPassword) return res.status(400).json({ error: 'Invalid username or password' });
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid username or password' });
+        }
 
         // Create JWT token
-        const token = jwt.sign({ userId: user._id, username: user.Username }, JWT_SECRET, { expiresIn: '24h' });
+        const token = jwt.sign(
+            { userId: user._id, username: user.Username },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
 
         res.json({
             message: 'Login successful',
             token,
             user: { id: user._id, username: user.Username }
         });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to login' });
