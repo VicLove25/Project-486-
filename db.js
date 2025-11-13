@@ -1,8 +1,12 @@
-// db.js
 import 'dotenv/config';
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 const uri = process.env.MONGO_URI;
+if (!uri) {
+    throw new Error("MONGO_URI not found");
+}
 
 const client = new MongoClient(uri, {
     serverApi: {
@@ -24,9 +28,10 @@ export async function connectDB() {
 }
 
 export function getDB() {
-    if (!db) throw new Error("Database not connected. Call connectDB first.");
+    if (!db) throw new Error("Database not connected. Call connectDB() first.");
     return db;
 }
+
 
 export async function closeDB() {
     if (client) {
