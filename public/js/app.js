@@ -1,4 +1,4 @@
-// app.document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
 // Elements
 const authSection = document.getElementById('auth-section');
 const usernameInput = document.getElementById('username');
@@ -199,6 +199,7 @@ function updateUIForAuthState() {
         upcomingListEl.innerHTML = '<li class="text-muted">No upcoming tasks</li>';
     }
 }
+
 
 // Initial check
 updateUIForAuthState();

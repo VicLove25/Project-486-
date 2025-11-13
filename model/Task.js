@@ -1,33 +1,33 @@
-import db from "../db.js";
+import { getDB } from "../db.js";
+import { ObjectId } from "mongodb";
 
-const tasks = db.collection("Tasks");
 export default class Task {
     constructor(date, event) {
         this.Date = date;
         this.Event = event;
+        this.isCompleted = false;
     }
 
-    // Save this task to MongoDB
+    // Access collection dynamically
+    static get collection() {
+        return getDB().collection("Tasks");
+    }
+
     async save() {
-        const result = await tasks.insertOne(this);
+        const result = await Task.collection.insertOne(this);
         this._id = result.insertedId;
         return result;
     }
 
-    // Get all tasks
     static async getAll() {
-        return await tasks.find().toArray();
+        return await Task.collection.find().toArray();
     }
 
-    // Find a task by ID
     static async findById(id) {
-        const { ObjectId } = await import("mongodb");
-        return await tasks.findOne({ _id: new ObjectId(id) });
+        return await Task.collection.findOne({ _id: new ObjectId(id) });
     }
 
-    // Delete a task
     static async deleteById(id) {
-        const { ObjectId } = await import("mongodb");
-        return await tasks.deleteOne({ _id: new ObjectId(id) });
+        return await Task.collection.deleteOne({ _id: new ObjectId(id) });
     }
 }

@@ -1,62 +1,61 @@
-import db from "../db.js"; // your MongoDB connection
+import { getDB, connectDB } from "../db.js";
 import { ObjectId } from "mongodb";
 
-const users = db.collection("Users");
-const taskLists = db.collection("TaskLists");
-const tasks = db.collection("Tasks");
-
 export default class User {
-    constructor(username, password, taskLists = []) {
+    constructor(username, password, fName, lName, taskLists = []) {
         this.Username = username;
         this.Password = password;
-        this.TaskLists = taskLists; // array of TaskList IDs as strings
+        this.First = fName;
+        this.Last = lName;
+        this.TaskLists = taskLists;
     }
 
-    // Save a new user to MongoDB
+    static get collection() {
+        const db = getDB();
+        return db.collection("Users");
+    }
+
     async save() {
-        const result = await users.insertOne(this);
-        this._id = result.insertedId; // store MongoDB _id in the instance
+        const result = await User.collection.insertOne(this);
+        this._id = result.insertedId;
         return result;
     }
 
-    // Find a user by ID
-    static async findById(id) {
-        return await users.findOne({ _id: new ObjectId(id) });
+    static async findByUsername(username) {
+        return await User.collection.findOne({ Username: username });
     }
 
+    static async findById(id) {
+        return await User.collection.findOne({ _id: new ObjectId(id) });
+    }
 
-    // Add a TaskList
     async addTaskList(listId) {
-        if (!this._id) throw new Error("User _id not set. Cannot add TaskList.");
-        if (!this.TaskLists.includes(listId)) this.TaskLists.push(listId);
-
-        await users.updateOne(
+        if (!this._id) throw new Error("User _id not set.");
+        await User.collection.updateOne(
             { _id: this._id },
             { $addToSet: { TaskLists: listId } }
         );
+        if (!this.TaskLists.includes(listId)) this.TaskLists.push(listId);
     }
 
-    // Fetch all tasks from TaskLists the user is subscribed to
     async getAllTasks() {
-        if (!this._id) throw new Error("User _id not set. Cannot fetch tasks.");
+        if (!this._id) throw new Error("User _id not set.");
 
-        const user = await users.findOne({ _id: new ObjectId(this._id) });
-        if (!user) throw new Error("User not found");
+        const db = getDB();
+        const taskListsCol = db.collection("TaskLists");
+        const tasksCol = db.collection("Tasks");
 
-        // Fetch all TaskLists the user is subscribed to
-        const userTaskLists = await taskLists
-            .find({ _id: { $in: user.TaskLists.map(id => new ObjectId(id)) } })
+        const userTaskLists = await taskListsCol
+            .find({ _id: { $in: this.TaskLists.map(id => new ObjectId(id)) } })
             .toArray();
 
-        // Fetch all tasks for each TaskList
         const allTasks = {};
         for (const list of userTaskLists) {
-            const listTasks = await tasks
+            const listTasks = await tasksCol
                 .find({ _id: { $in: list.ids.map(id => new ObjectId(id)) } })
                 .toArray();
-            allTasks[list.Name] = listTasks; // Group tasks by TaskList name
+            allTasks[list.Name] = listTasks;
         }
-
         return allTasks;
     }
 }
