@@ -191,10 +191,20 @@ function updateUIForAuthState() {
     if (token) {
         authSection.style.display = 'none';
         taskSection.style.display = 'block';
+
+        // Show sidebar and toggle button after login
+        sidebar.style.display = 'block';
+        toggleBtn.style.display = 'block';
+
         fetchTasks();
     } else {
         authSection.style.display = 'block';
         taskSection.style.display = 'none';
+
+        // Hide sidebar and toggle button until login
+        sidebar.style.display = 'none';
+        toggleBtn.style.display = 'none';
+
         taskList.innerHTML = '';
         upcomingListEl.innerHTML = '<li class="text-muted">No upcoming tasks</li>';
     }
@@ -202,4 +212,3 @@ function updateUIForAuthState() {
 
 // Initial check
 updateUIForAuthState();
-});
